@@ -1,6 +1,6 @@
 # Lambda Function para inserción periódica en PostgreSQL
 
-En mi clase de Bases de Datos no relacionales vemos, como módulo final, la construcción de Data Lakes.
+En mi clase de [Bases de Datos No Relacionales](https://xuxoramos.github.io/nosql-4-ds/) vemos, como módulo final, la construcción de Data Lakes.
 
 Para este propósito, vamos a configurar los siguientes componentes en AWS:
 
