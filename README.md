@@ -23,58 +23,40 @@ CREATE TABLE random_data (
 
 ## Lambda Function
 
-```python
-import json
-import psycopg2
-from config import config
-from datetime import datetime
-import random
-import string
+![image](https://user-images.githubusercontent.com/1316464/141932380-2b746db0-22b1-4d90-ba28-570e29813ac7.png)
 
-def connect():
-    # Connect to the PostgreSQL database server
-    connection = None
-    try:
-        # read connection parameters
-        params = config()
-        # connect to the PostgreSQL server
-        print('Connecting to the PostgreSQL database...')
-        connection = psycopg2.connect(**params)
-        # create a cursor
-        cur = connection.cursor()
+![image](https://user-images.githubusercontent.com/1316464/141932505-c4b30d99-a92d-4053-9a0b-2150b856bc2e.png)
 
-        # initializing string
-        str_data = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+![image](https://user-images.githubusercontent.com/1316464/141932815-60230a59-33d7-418b-8b39-ef5ecb7b2086.png)
 
-        postgres_insert_query = """ INSERT INTO random_data (valor, fecha) VALUES(%s, %s);"""
-        record_to_insert = (str_data, datetime.now())
-        cur.execute(postgres_insert_query, record_to_insert)
+![image](https://user-images.githubusercontent.com/1316464/141932954-3044a36a-0b33-4cb3-9adb-e84b2025836b.png)
 
-        connection.commit()
+![image](https://user-images.githubusercontent.com/1316464/141933032-2c4b18ea-442c-4812-a9d1-3babe757530f.png)
 
-	    # close the communication with the PostgreSQL
-        cur.close()
-        count = cur.rowcount
-        return {
-            'statusCode': 200,
-            'body': json.dumps(str(count) + "Record inserted successfully into mobile table")
-        }
-    except (Exception, psycopg2.Error) as error:
-        print("Failed to insert record into mobile table", error)
-        return {
-            'statusCode': 500,
-            'body': json.dumps(str(error))
-        }
-    finally:
-        # closing database connection.
-        if connection:
-            cur.close()
-            connection.close()
-            print("PostgreSQL connection is closed")
+Al descargar este repo, deben:
 
-def lambda_handler(event, context):
-    connect()
-```
+1. modificar el archivo `/db.ini` y capturar sus credenciales de su instalación de PostgreSQL
+2. zipear el contenido del repo
+3. subirlo a la creación de la función lambda como se muestra acá abajo
+
+![image](https://user-images.githubusercontent.com/1316464/141933120-cc4285e6-54d2-4d16-8964-a843d5df8218.png)
+
 
 ## Evento en EventBridge
+
+![image](https://user-images.githubusercontent.com/1316464/141931577-098846ed-7985-4ca7-98e4-f9528ee951a2.png)
+
+![image](https://user-images.githubusercontent.com/1316464/141931836-4f27aec2-3d13-4de3-9eb6-e2c27b7d79de.png)
+
+![image](https://user-images.githubusercontent.com/1316464/141932107-56a319ec-1aeb-4345-83b0-9e84ae96abc7.png)
+
+![image](https://user-images.githubusercontent.com/1316464/141932169-ba8e3b14-0dd4-41d5-92f3-124bf823e32d.png)
+
+![image](https://user-images.githubusercontent.com/1316464/141932249-683a1ca5-0122-4243-8ea8-06369c286b01.png)
+
+## Listo!
+
+Chequen su tabla, debe haber un registro cada 2 mins:
+
+![image](https://user-images.githubusercontent.com/1316464/141933580-853e72de-88be-4648-8fa3-c1087df18d54.png)
 
